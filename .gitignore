@@ -1,0 +1,4 @@
+# ignore wifipass, apikeys, etc.
+esp-matrixclock/credentials.h
+nogit
+.DS_Store
