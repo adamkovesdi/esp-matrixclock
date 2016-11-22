@@ -8,13 +8,16 @@
  *
  */
 
-#define MYSSID			"changeme"		// network SSID
-#define MYPASS			"meeto"				// WiFi PSK
-#define WEATHERKEY	"yourapikey"	// openweathermaps API key
-#define CITYID			"yourcity"		// openweathermaps city ID
+// set these to your credentials (otherwise it will use mine - which are not included)
 
-// comment out this credentials.h include if you set the above
+// #define MYSSID			"changeme"		// network SSID
+// #define MYPASS			"meeto"				// WiFi PSK
+// #define WEATHERKEY	"yourapikey"	// openweathermaps API key
+// #define CITYID			"yourcity"		// openweathermaps city ID
+
+#ifndef MYSSID
 #include "credentials.h"
+#endif
 
 #include <Arduino.h>
 #include <NTPClient.h>
