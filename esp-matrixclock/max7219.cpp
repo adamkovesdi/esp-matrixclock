@@ -21,11 +21,12 @@ void sendCmdAll(byte cmd, byte data)
   }
   digitalWrite(CS_PIN, HIGH);
 }
-
+/*
 void refresh(int addr) {
   for (int i = 0; i < 8; i++)
     sendCmd(addr, i + CMD_DIGIT0, scr[addr * 8 + i]);
 }
+*/
 
 void refreshAll() {
   for (int c = 0; c < 8; c++) {

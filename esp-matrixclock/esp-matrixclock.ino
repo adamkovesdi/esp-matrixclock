@@ -51,7 +51,7 @@ void display_weather()
 	refresh_weather();
 	clr();
 	int t=getTemp();
-	char buf[6], *string;
+	char buf[6];
 	sprintf(buf,"%dC",t);
 	drawString(0,font,buf);
 	drawChar(24,weather_icons,getWeatherIcon());
@@ -60,7 +60,7 @@ void display_weather()
 	refreshAll();
 }
 
-void dispay_clock()
+void display_clock()
 {
 	timeClient.update();
 	draw_clock(timeClient.getHours(),timeClient.getMinutes(),timeClient.getSeconds());
@@ -82,14 +82,14 @@ void setup()
 void loop()
 {
 	timeClient.update();
-	uint8_t	timeslice=timeClient.getEpochTime() % 10;
+	uint8_t	timeslice=timeClient.getEpochTime() % 20;
 	if ((timeslice >4) && (timeslice <8))
 	{
 		display_weather();
 	}
 	else
 	{
-		dispay_clock();
+		display_clock();
 	}
 	delay(100);
 }

@@ -1,24 +1,12 @@
 #include "display.h"
 
-void draw_font4x7(uint8_t column, uint8_t number) {
+void draw_myfont(uint8_t column, const uint8_t *data, uint8_t number) {
 	// Draw a digit on the canvas at position specified by column
 	uint8_t i,j;
 	for(i=0;i<4;i++) {
 		for(j=0;j<8;j++) {
-			uint8_t val;
-			val=(pgm_read_byte(&font4x7[number][i])) & (1<<j);
-			setPixel(i+column,j,val);
-		}
-	}
-}
-
-void draw_font4x8(uint8_t column, uint8_t number) {
-	// Draw a digit on the canvas at position specified by column
-	uint8_t i,j;
-	for(i=0;i<4;i++) {
-		for(j=0;j<8;j++) {
-			uint8_t val;
-			val=(pgm_read_byte(&font4x8[number][i])) & (1<<j);
+			bool val;
+			val=(pgm_read_byte(data + number * 4 + i)) & (1<<j);
 			setPixel(i+column,j,val);
 		}
 	}
@@ -26,20 +14,16 @@ void draw_font4x8(uint8_t column, uint8_t number) {
 
 void draw_clock(uint8_t hour,uint8_t minute,uint8_t second)
 {
-	// uint8_t hour=random(24);
-	// uint8_t minute=random(60);
-	// uint8_t second=random(60);
-	
 	clr();
-	if(hour>=10) draw_font4x8(0,hour/10);
-	else draw_font4x8(0,10); //blank
-	draw_font4x8(5,hour%10);
+	if(hour>=10) draw_myfont(0,font4x8,hour/10);
+	else draw_myfont(0,font4x8,10); //blank
+	draw_myfont(5,font4x8,hour%10);
 	setPixel(10,2,1);
 	setPixel(10,5,1);
-	draw_font4x8(12,minute/10);
-	draw_font4x8(17,minute%10);
-	draw_font4x7(23,second/10);
-	draw_font4x7(28,second%10);
+	draw_myfont(12,font4x8,minute/10);
+	draw_myfont(17,font4x8,minute%10);
+	draw_myfont(23,font4x7,second/10);
+	draw_myfont(28,font4x7,second%10);
 	refreshAll();	
 }
 
@@ -67,3 +51,4 @@ void drawString(uint8_t col, const uint8_t *data, const char *string)
 	}
 	refreshAll();
 }
+

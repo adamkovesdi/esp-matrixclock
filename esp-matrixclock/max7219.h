@@ -30,7 +30,7 @@
 
 void sendCmd(int addr, byte cmd, byte data);
 void sendCmdAll(byte cmd, byte data);
-void refresh(int addr);
+// void refresh(int addr);
 void refreshAll() ;
 
 void clr();
