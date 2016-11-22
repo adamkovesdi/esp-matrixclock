@@ -3,6 +3,8 @@
  * (c)2016 by Adam Kovesdi
  * version 2
  *
+ * TODO: detect & handle lost network connection
+ * TODO: detect & handle invalid weather data 
  * TODO: improvements 
  *
  */
