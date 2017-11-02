@@ -1,13 +1,13 @@
 
 ![esp-matrixclock](clock.jpg)
 
-Newbie's guide to esp-matrixclock
+Newbie's guide to adamkov's esp-matrixclock
 
-Courtesy of Vajk
+This HOWTO is by the courtesy of Vajk
 
 ### HW BOM:
 - [nodemcu v3 board](http://www.banggood.com/Geekcreit-Doit-NodeMcu-Lua-ESP8266-ESP-12E-WIFI-Development-Board-p-985891.html)
-- [max7219 based led matrix](http://www.banggood.com/Geekcreit-Doit-NodeMcu-Lua-ESP8266-ESP-12E-WIFI-Development-Board-p-985891.html)
+- [max7219 based led matrix](https://www.banggood.com/MAX7219-Dot-Matrix-Module-4-in-1-Display-For-Arduino-p-1072083.html)
 - micro usb cable
 - female-female dupont cable 5pcs
 

@@ -76,7 +76,7 @@ void setup()
 	}
 	timeClient.begin();
 	drawString(0,font,"link up");
-	timeClient.setTimeOffset(3600);
+	timeClient.setTimeOffset(7200);
 }
 
 void loop()
