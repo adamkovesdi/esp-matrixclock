@@ -68,6 +68,10 @@ void display_clock()
 
 void setup()
 {
+  // init jumper for timezone
+  int jumper;
+  pinMode(14,INPUT_PULLUP);
+  jumper = digitalRead(14);
 	initMAX7219();
 	drawString(0,font," Conn...");
 	WiFi.begin(MYSSID, MYPASS);
@@ -76,7 +80,14 @@ void setup()
 	}
 	timeClient.begin();
 	drawString(0,font,"link up");
-	timeClient.setTimeOffset(7200);
+  if(jumper)
+  {
+	  timeClient.setTimeOffset(3600);
+  }
+  else
+  {
+   timeClient.setTimeOffset(7200);
+  }
 }
 
 void loop()
