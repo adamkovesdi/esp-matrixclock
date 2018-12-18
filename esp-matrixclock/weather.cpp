@@ -104,7 +104,7 @@ void getWeatherData(const char *weatherKey, const char* cityID)
 		return;
 	}
 	temp = root["main"]["temp"];
-	iconid = root["weather"]["icon"].as<String>();
+	iconid = root["weather"][0]["icon"].as<String>();
 	windspeed = root["wind"]["speed"];
 	winddir = root["wind"]["deg"];
 	Serial.print("w");
