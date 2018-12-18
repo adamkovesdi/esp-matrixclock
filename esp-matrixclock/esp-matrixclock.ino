@@ -1,47 +1,52 @@
 /*
  * ESP8266 driven matrix clock with weather
- * (c)2016 by Adam Kovesdi
- * version 2
+ * (c)2016-2018 Adam Kovesdi
+ * version 3
  *
- * TODO: detect & handle lost network connection
- * TODO: detect & handle invalid weather data 
- * TODO: improvements 
+ * TODO: missing weather functionality... in progress of rewrite
  *
+ * required libraries:
+ * ArduinoJson version 5(!) for weather functionality
  */
 
 // set these to your credentials (otherwise it will use mine - not included)
 
-// #define MYSSID			"changeme"		// network SSID
-// #define MYPASS			"meeto"				// WiFi PSK
 // #define WEATHERKEY	"yourapikey"	// openweathermaps API key
 // #define CITYID			"yourcity"		// openweathermaps city ID
 
-#ifndef MYSSID
+#ifndef WEATHERKEY
 #include "credentials.h"
 #endif
 
 #include <Arduino.h>
-#include <NTPClient.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 
+#include "ntp.h"
 #include "fonts.h"
 #include "max7219.h"
 #include "display.h"
 #include "weather.h"
+#include "setupwifi.h"
 
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP);
+// ntp stuff
+NTP NTPclient;
+#define CET 1 // central european time
 
+// weather related stuff
 unsigned long lastwupdate=0;		// last weather update EPOCH timestamp
-#define WEATHER_UPDATEINTERVAL		120 // in seconds
+#define WEATHER_POLL_INTERVAL	30 // in seconds
+
+time_t getNTPtime(void)
+{
+  return NTPclient.getNtpTime();
+}
 
 void refresh_weather()
 {
-	timeClient.update();
-	if(timeClient.getEpochTime() > (lastwupdate+WEATHER_UPDATEINTERVAL))
+	if(now() > (lastwupdate + WEATHER_POLL_INTERVAL))
 	{
-		lastwupdate=timeClient.getEpochTime();
+		lastwupdate = now();
 		getWeatherData(WEATHERKEY, CITYID);
 	}
 }
@@ -62,38 +67,33 @@ void display_weather()
 
 void display_clock()
 {
-	timeClient.update();
-	draw_clock(timeClient.getHours(),timeClient.getMinutes(),timeClient.getSeconds());
+	draw_clock(hour(), minute(), second());
 }
 
 void setup()
 {
-  // init jumper for timezone
-  int jumper;
-  pinMode(14,INPUT_PULLUP);
-  jumper = digitalRead(14);
 	initMAX7219();
 	drawString(0,font," Conn...");
-	WiFi.begin(MYSSID, MYPASS);
-	while ( WiFi.status() != WL_CONNECTED ) {
-		delay ( 500 );
-	}
-	timeClient.begin();
+
+	Serial.begin(9600);
+	Serial.println(); Serial.println();
+
+	while (!startWiFi()) { delay(1500); }
+	Serial.println("WiFi connected");
+	Serial.println("IP address: ");
+	Serial.println(WiFi.localIP());
+	Serial.println();
+
+  NTPclient.begin("hu.pool.ntp.org", CET);
+  setSyncInterval(SECS_PER_HOUR);
+  setSyncProvider(getNTPtime);
+
 	drawString(0,font,"link up");
-  if(jumper)
-  {
-	  timeClient.setTimeOffset(3600);
-  }
-  else
-  {
-   timeClient.setTimeOffset(7200);
-  }
 }
 
 void loop()
 {
-	timeClient.update();
-	uint8_t	timeslice=timeClient.getEpochTime() % 20;
+	uint8_t	timeslice=now() % 20;
 	if ((timeslice >4) && (timeslice <8))
 	{
 		display_weather();
@@ -102,7 +102,6 @@ void loop()
 	{
 		display_clock();
 	}
-	delay(100);
 }
 
 

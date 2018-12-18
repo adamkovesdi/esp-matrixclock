@@ -6,6 +6,7 @@
 
 const char *weatherHost = "api.openweathermap.org";
 const char *weatherLang = "&lang=en";
+
 WiFiClient client;
 float temp, windspeed;
 int winddir;
@@ -47,15 +48,15 @@ int getWeatherIcon()
 			if(iconid[1]=='3') return 3;
 			if(iconid[1]=='4') return 4;
 			if(iconid[1]=='9') return 5;
-		break;
+			break;
 		case '1':
 			if(iconid[1]=='0') return 6;
 			if(iconid[1]=='1') return 7;
 			if(iconid[1]=='3') return 8;
-		break;
+			break;
 		case '5':
 			return 9;
-		break;
+			break;
 	}
 	return 0;
 }
@@ -67,46 +68,52 @@ int getTemp()
 
 void getWeatherData(const char *weatherKey, const char* cityID)
 {
-  Serial.print("connecting to "); Serial.println(weatherHost);
-  if (client.connect(weatherHost, 80)) {
-    client.println(String("GET /data/2.5/weather?id=") + cityID + "&units=metric&appid=" + weatherKey + weatherLang + "\r\n" +
-                "Host: " + weatherHost + "\r\nUser-Agent: ArduinoWiFi/1.1\r\n" +
-                "Connection: close\r\n\r\n");
-  } else {
-    Serial.println("connection failed");
-    return;
-  }
-  String line;
-  int repeatCounter = 0;
-  while (!client.available() && repeatCounter < 10) {
-    delay(500);
-    Serial.println("w.");
-    repeatCounter++;
-  }
-  while (client.connected() && client.available()) {
-    char c = client.read(); 
-    if (c == '[' || c == ']') c = ' ';
-    line += c;
-  }
+	Serial.println(String("GET /data/2.5/weather?id=") + cityID + "&units=metric&appid=" + weatherKey + weatherLang);
+	if (client.connect(weatherHost, 80))
+	{
+		client.println(String("GET /data/2.5/weather?id=") + cityID + "&units=metric&appid=" + weatherKey + weatherLang + "\r\n" +
+				"Host: " + weatherHost + "\r\nUser-Agent: ArduinoWiFi/1.1\r\n" +
+				"Connection: close\r\n\r\n");
+	} else {
+		Serial.println("connection failed");
+		return;
+	}
+	String line;
+	/* this code needs to be revised, it's blocking */
+	int repeatCounter = 0;
+	while (!client.available() && repeatCounter < 10) {
+		delay(500);
+		Serial.println("w.");
+		repeatCounter++;
+	}
+	/* end of problem code */
+	while (client.connected() && client.available()) {
+		Serial.print("c");
+		char c = client.read(); 
+		if (c == '[' || c == ']') c = ' ';
+		line += c;
+	}
+	Serial.print("Response :");
+	Serial.println(line);
 
-  client.stop();
+	client.stop();
 
-  DynamicJsonBuffer jsonBuf;
-  JsonObject &root = jsonBuf.parseObject(line);
-  if (!root.success())
-  {
-    Serial.println("parseObject() failed");
-    return;
-  }
-  temp = root["main"]["temp"];
-  iconid = root["weather"]["icon"].as<String>();
-  windspeed = root["wind"]["speed"];
-  winddir = root["wind"]["deg"];
+	DynamicJsonBuffer jsonBuf;
+	JsonObject &root = jsonBuf.parseObject(line);
+	if (!root.success())
+	{
+		Serial.println("parseObject() failed");
+		return;
+	}
+	temp = root["main"]["temp"];
+	iconid = root["weather"]["icon"].as<String>();
+	windspeed = root["wind"]["speed"];
+	winddir = root["wind"]["deg"];
+	Serial.print("w");
 
-	// unused data below
+	// unused data
 	// -----------------
-  // humidity = root["main"]["humidity"];
-  // pressure = root["main"]["pressure"];
-  // clouds = root["clouds"]["all"];
-  // String deg = String(char('~'+25));
+	// humidity = root["main"]["humidity"];
+	// pressure = root["main"]["pressure"];
+	// clouds = root["clouds"]["all"];
 }
