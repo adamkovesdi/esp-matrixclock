@@ -35,15 +35,15 @@ Current weather is displayed 3 times per minute for 4 seconds.
 
 Updated from the previous version (courtesy of Vajk)
 
-Wiring between NodeMCU and matrix board
+### Wiring between NodeMCU and matrix board
 
 - NodeMCU 3.3V	-> Matrix Vcc
 - NodeMCU GND		-> Matrix GND
 - NodeMCU D8		-> Matrix DIN
 - NodeMCU D7		-> Matrix CS
-- NodeMCU D8		-> Matrix CLK
+- NodeMCU D6		-> Matrix CLK
 
-Software installation
+### Software installation
 
 - Download & install latest Arduino IDE [https://www.arduino.cc/en/main/software](https://www.arduino.cc/en/main/software) 
 - In Arduino IDE File, Preferences: Additional Boards Manager URLs: [http://arduino.esp8266.com/stable/package_esp8266com_index.json](http://arduino.esp8266.com/stable/package_esp8266com_index.json) 
@@ -55,27 +55,27 @@ Optional steps for weather info
 - Openweathermap: [http://openweathermap.org/](http://openweathermap.org/) 
 	- Register an account
 	- Get your API key at: [https://home.openweathermap.org/api_keys](https://home.openweathermap.org/api_keys) 
-	- Find your location/city id on here: [http://openweathermap.org/help/city_list.txt](http://openweathermap.org/help/city_list.txt) 
+	- Find your location/city id on here: [https://openweathermap.org/find?q=](https://openweathermap.org/find?q=) 
 
 - Changes in file esp-matrixclock.ino needed for weather functionality
 	- Add your api key from openweathermap
 	- Add your city id from same
 	- Save file
 
-Uploading
+### Uploading
 
 	- Tools, Board: select ESP8266 generic module
 	- Tools, Port: select COM port
 	- Tools, Reset method: set to NodeMCU
 	- Click upload (arrow button below menu bar on the upper left)
 
-Configuration
+### Configuration
 
 	- If the clock fails to connect to an AP it will ask for credentials
 	- Run serial monitor (Arduino IDE) or minicom/putty, etc at 9600 bps
 	- Type in Wifi configuration
 
-Hardware BOM
+### Hardware BOM
 
 - [NodeMCU v3 board](http://www.banggood.com/Geekcreit-Doit-NodeMcu-Lua-ESP8266-ESP-12E-WIFI-Development-Board-p-985891.html)
 - [MAX7219 based LED matrix](https://www.banggood.com/MAX7219-Dot-Matrix-Module-4-in-1-Display-For-Arduino-p-1072083.html)
