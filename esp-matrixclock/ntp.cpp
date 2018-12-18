@@ -29,7 +29,7 @@ void NTP::begin(const char* ntpServerName, int TimeZoneOffset)
 time_t NTP::getNtpTime(void)
 {
   while (UDP.parsePacket() > 0) ; // discard any previously received packets
-  //get a random server from the pool
+  // get a random server from the pool
   IPAddress timeServerIP;
   WiFi.hostByName(_serverName, timeServerIP); 
   sendNTPpacket(timeServerIP);
@@ -37,7 +37,7 @@ time_t NTP::getNtpTime(void)
   while (millis() - beginWait < 1500) {
     int size = UDP.parsePacket();
     if (size >= NTP_PACKET_SIZE) {
-      Serial.println("Receive NTP Response");
+      Serial.println("Receiving NTP Response");
       UDP.read(packetBuffer, NTP_PACKET_SIZE);  // read packet into the buffer
       time_t secsSince1900;
       // convert four bytes starting at location 40 to a long integer
@@ -89,7 +89,7 @@ uint8_t NTP::DSToffset(time_t date)
    * last Sunday of October @2AM
 	 *
   */
-  //get seconds for last Sunday of March
+  // get seconds for last Sunday of March
   tmElements_t tm;
   tm.Month = 4; // April
   tm.Year = year(date) - 1970;
@@ -97,12 +97,12 @@ uint8_t NTP::DSToffset(time_t date)
   tm.Hour = 2; //2AM
   time_t beginDST = previousSunday( makeTime(tm) );
   
-  //get seconds for last Sunday in October
+  // get seconds for last Sunday in October
   tm.Month = 11; // November
   tm.Day = 1; // first day of November
   time_t endDST = previousSunday ( makeTime(tm) );
 
-  //now, if we are between the two times we are in DST
+  // now, if we are between the two times we are in DST
   return (((date >= beginDST) && (date < endDST))? 1: 0);
 }
 

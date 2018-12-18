@@ -2,12 +2,12 @@
 
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
 
-const char *weatherHost = "api.openweathermap.org";
+const char *weatherHost = "http://api.openweathermap.org";
 const char *weatherLang = "&lang=en";
 
-WiFiClient client;
 float temp, windspeed;
 int winddir;
 String iconid;
@@ -68,35 +68,33 @@ int getTemp()
 
 void getWeatherData(const char *weatherKey, const char* cityID)
 {
-	Serial.println(String("GET /data/2.5/weather?id=") + cityID + "&units=metric&appid=" + weatherKey + weatherLang);
-	if (client.connect(weatherHost, 80))
+	String url = String(weatherHost) + "/data/2.5/weather?id=" + cityID + "&units=metric&appid=" + weatherKey + weatherLang;
+	String line;
+	// Serial.println(String("GET " + url)); // debug info
+
+	if (WiFi.status() == WL_CONNECTED) // Check WiFi connection status
 	{
-		client.println(String("GET /data/2.5/weather?id=") + cityID + "&units=metric&appid=" + weatherKey + weatherLang + "\r\n" +
-				"Host: " + weatherHost + "\r\nUser-Agent: ArduinoWiFi/1.1\r\n" +
-				"Connection: close\r\n\r\n");
-	} else {
-		Serial.println("connection failed");
+		HTTPClient http;  // Declare an object of class HTTPClient
+		http.begin(url);  // Specify request destination
+		int httpCode = http.GET(); //Send the request
+		if (httpCode > 0) // Check the returning code
+		{
+			line = http.getString();   // Get the request response payload
+		}
+		else
+		{
+			Serial.println("HTTP response code is no good");
+			http.end();
+			return;
+		}
+		http.end();   //Close connection
+		// Serial.print("Response :"); Serial.println(line); // debug info
+	}
+	else
+	{
+		Serial.println("Wifi connection failed");
 		return;
 	}
-	String line;
-	/* this code needs to be revised, it's blocking */
-	int repeatCounter = 0;
-	while (!client.available() && repeatCounter < 10) {
-		delay(500);
-		Serial.println("w.");
-		repeatCounter++;
-	}
-	/* end of problem code */
-	while (client.connected() && client.available()) {
-		Serial.print("c");
-		char c = client.read(); 
-		if (c == '[' || c == ']') c = ' ';
-		line += c;
-	}
-	Serial.print("Response :");
-	Serial.println(line);
-
-	client.stop();
 
 	DynamicJsonBuffer jsonBuf;
 	JsonObject &root = jsonBuf.parseObject(line);

@@ -3,14 +3,13 @@
  * (c)2016-2018 Adam Kovesdi
  * version 3
  *
- * TODO: missing weather functionality... in progress of rewrite
+ * libray dependencies:
  *
- * required libraries:
  * ArduinoJson version 5(!) for weather functionality
+ *  https://github.com/bblanchon/ArduinoJson
  */
 
-// set these to your credentials (otherwise it will use mine - not included)
-
+// For weather functionality, get API key at openweathermap.org and set these two definitions 
 // #define WEATHERKEY	"yourapikey"	// openweathermaps API key
 // #define CITYID			"yourcity"		// openweathermaps city ID
 
@@ -34,8 +33,8 @@ NTP NTPclient;
 #define CET 1 // central european time
 
 // weather related stuff
-unsigned long lastwupdate=0;		// last weather update EPOCH timestamp
-#define WEATHER_POLL_INTERVAL	30 // in seconds
+unsigned long lastweatherinfoupdate=0;			// last weather update EPOCH timestamp
+#define WEATHER_POLL_INTERVAL	300						// in seconds
 
 time_t getNTPtime(void)
 {
@@ -44,9 +43,9 @@ time_t getNTPtime(void)
 
 void refresh_weather()
 {
-	if(now() > (lastwupdate + WEATHER_POLL_INTERVAL))
+	if(now() > (lastweatherinfoupdate + WEATHER_POLL_INTERVAL))
 	{
-		lastwupdate = now();
+		lastweatherinfoupdate = now();
 		getWeatherData(WEATHERKEY, CITYID);
 	}
 }
@@ -61,7 +60,7 @@ void display_weather()
 	drawString(0,font,buf);
 	drawChar(24,weather_icons,getWeatherIcon());
 	drawChar(18,winddir_icons,getWinddir());
-	for(int i=0;i<getWindspeed();i++) setPixel(16+i,7,true);
+	for(int i=0;i<getWindspeed();i++) setPixel(16+i,7,true); // wind speed scale
 	refreshAll();
 }
 
@@ -93,6 +92,7 @@ void setup()
 
 void loop()
 {
+#ifdef WEATHERKEY
 	uint8_t	timeslice=now() % 20;
 	if ((timeslice >4) && (timeslice <8))
 	{
@@ -102,6 +102,9 @@ void loop()
 	{
 		display_clock();
 	}
+#else
+	display_clock();
+#endif
 }
 
 
