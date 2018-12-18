@@ -72,7 +72,7 @@ void display_clock()
 void setup()
 {
 	initMAX7219();
-	drawString(0,font," Conn...");
+	drawStringClr(0,font," Conn...");
 
 	Serial.begin(9600);
 	Serial.println(); Serial.println();
@@ -87,7 +87,7 @@ void setup()
   setSyncInterval(SECS_PER_HOUR);
   setSyncProvider(getNTPtime);
 
-	drawString(0,font,"link up");
+	drawStringClr(0,font,"link up");
 }
 
 void loop()
@@ -106,5 +106,3 @@ void loop()
 	display_clock();
 #endif
 }
-
-

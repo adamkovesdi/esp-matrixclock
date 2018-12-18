@@ -21,7 +21,8 @@ int getWinddir()
 	if(winddir<225) return 5;
 	if(winddir<270) return 6;
 	if(winddir<315) return 7;
-	else return 1;
+	if(winddir<361) return 1;
+	else return 0; // no wind I suppose
 }
 
 int getWindspeed()
@@ -107,7 +108,7 @@ void getWeatherData(const char *weatherKey, const char* cityID)
 	iconid = root["weather"][0]["icon"].as<String>();
 	windspeed = root["wind"]["speed"];
 	winddir = root["wind"]["deg"];
-	Serial.print("w");
+	Serial.println("Received weather data");
 
 	// unused data
 	// -----------------
