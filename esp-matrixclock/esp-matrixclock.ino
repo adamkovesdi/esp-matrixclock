@@ -4,9 +4,11 @@
  * version 3
  *
  * libray dependencies:
- *
+ * Timelib
+ *  https://github.com/PaulStoffregen/Time
  * ArduinoJson version 5(!) for weather functionality
  *  https://github.com/bblanchon/ArduinoJson
+ * 
  */
 
 // For weather functionality, get API key at openweathermap.org and set these two definitions 
@@ -20,6 +22,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
+#include <Time.h>
 
 #include "ntp.h"
 #include "fonts.h"

@@ -38,4 +38,3 @@ class NTP
 };
 
 #endif	/* NTP_H */
-

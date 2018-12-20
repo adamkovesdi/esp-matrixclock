@@ -13,6 +13,7 @@
 #include "ESP8266WiFi.h"
 #include "Arduino.h"
 #include "ntp.h"
+#include <Time.h>
 
 NTP::NTP(void)
 {
@@ -105,4 +106,3 @@ uint8_t NTP::DSToffset(time_t date)
   // now, if we are between the two times we are in DST
   return (((date >= beginDST) && (date < endDST))? 1: 0);
 }
-

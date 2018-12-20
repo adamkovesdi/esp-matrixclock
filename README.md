@@ -18,10 +18,10 @@ The firmware should be compiled on your computer using Arduino IDE and then uplo
 
 
 ## Prerequisites
-- ESP8266 board (recommended: NodeMCU/compatible see HOWTO)
+- ESP8266 board (recommended: NodeMCU/compatible see BOM)
 - MAX7219 based LED matrix display (order from China)
-- Openweathermap account
-- Arduino IDE + libraries (see below)
+- *Openweathermap account (optional)*
+- Arduino IDE + libraries (see below, and READ Software installation section)
 
 ## Time display screen
 ![esp-matrixclock](pictures/clock-time.png)
@@ -31,64 +31,81 @@ Current weather is displayed 3 times per minute for 4 seconds.
 
 ![esp-matrixclock](pictures/clock-weather.png)
 
-## Installation HOWTO
+## Build & Installation HOWTO
 
-Updated from the previous version (courtesy of Vajk)
+### Hardware BOM
+
+- [NodeMCU v3 board](http://www.banggood.com/Geekcreit-Doit-NodeMcu-Lua-ESP8266-ESP-12E-WIFI-Development-Board-p-985891.html)
+- [MAX7219 based LED matrix](https://www.banggood.com/MAX7219-Dot-Matrix-Module-4-in-1-Display-For-Arduino-p-1072083.html)
+- Micro usb to USB cable
+- Female-female dupont cable 5pcs (usually comes with the display)
 
 ### Wiring between NodeMCU and matrix board
 
-- NodeMCU 3.3V	-> Matrix Vcc
-- NodeMCU GND		-> Matrix GND
-- NodeMCU D8		-> Matrix DIN
-- NodeMCU D7		-> Matrix CS
-- NodeMCU D6		-> Matrix CLK
+```
+NodeMCU 3.3V -> Matrix Vcc
+NodeMCU GND  -> Matrix GND
+NodeMCU D8   -> Matrix DIN
+NodeMCU D7   -> Matrix CS
+NodeMCU D6   -> Matrix CLK
+```
 
 ### Software installation
 
-- Download & install latest Arduino IDE [https://www.arduino.cc/en/main/software](https://www.arduino.cc/en/main/software) 
-- In Arduino IDE File, Preferences: Additional Boards Manager URLs: [http://arduino.esp8266.com/stable/package_esp8266com_index.json](http://arduino.esp8266.com/stable/package_esp8266com_index.json) 
-- Tools/Manage Libraries: Search for ArduinoJSON by bblanchon install version 5 (NOT 6!)
-- NTP Client lib is no longer a dependency (courtesy of @moeur)
+- Download & Install Arduino IDE (1.8.8 at the time of writing)
+[https://www.arduino.cc/en/main/software](https://www.arduino.cc/en/main/software) 
 
-Optional steps for weather info
+In Arduino IDE
+- File/Preferences/Additional Board Manager URLs: [http://arduino.esp8266.com/stable/package_esp8266com_index.json](http://arduino.esp8266.com/stable/package_esp8266com_index.json)
+- Tools/Boards/Board Manager: Install esp8266
+- Tools/Board: select NodeMCU 1.0 (ESP 12-E Module)
+- Tools/Manage Libraries: search for & install ArduinoJSON by bblanchon version 5.13.4 (version 6.x.x will not work!)
+- Tools/Manage Libraries: search for & install Time 1.5.0 by Michael Margolis
+- *NTP Client lib is no longer a dependency (courtesy of @moeur)*
+
+Optional steps for weather info functionality
 
 - Openweathermap: [http://openweathermap.org/](http://openweathermap.org/) 
 	- Register an account
 	- Get your API key at: [https://home.openweathermap.org/api_keys](https://home.openweathermap.org/api_keys) 
 	- Find your location/city id on here: [https://openweathermap.org/find?q=](https://openweathermap.org/find?q=) 
 
-- Changes in file esp-matrixclock.ino needed for weather functionality
-	- Add your api key from openweathermap
+- Changes in file *esp-matrixclock.ino* needed for weather functionality
+	- Add your api key from openweathermap: uncomment define WEATHERKEY
 	- Add your city id from same
 	- Save file
 
 ### Uploading
 
-	- Tools, Board: select ESP8266 generic module
-	- Tools, Port: select COM port
-	- Tools, Reset method: set to NodeMCU
-	- Click upload (arrow button below menu bar on the upper left)
+- Tools, Board: select NodeMCU 1.0 (ESP 12-E Module)
+- Tools, Port: select COM port
+- Click upload (arrow button below menu bar on the upper left)
 
-### Configuration
+Upload parameters (tested with Arduino IDE 1.8.8):
+```
+Board: "NodeMCU 1.0 (ESP-12E Module)"
+Upload Speed: "115200"
+CPU Frequency: "80MHz"
+Flash Size: "4M (1M SPIFFS)"
+Debug: Disabled, None
+IwIP Variant: "v2 Lower Memory"
+VTables: "Flash"
+Erase Flash: "Only Sketch"
+```
 
-	- If the clock fails to connect to an AP it will ask for credentials
-	- Run serial monitor (Arduino IDE) or minicom/putty, etc at 9600 bps
-	- Type in Wifi configuration
+### Wifi Configuration
 
-### Hardware BOM
-
-- [NodeMCU v3 board](http://www.banggood.com/Geekcreit-Doit-NodeMcu-Lua-ESP8266-ESP-12E-WIFI-Development-Board-p-985891.html)
-- [MAX7219 based LED matrix](https://www.banggood.com/MAX7219-Dot-Matrix-Module-4-in-1-Display-For-Arduino-p-1072083.html)
-- Micro usb cable
-- Female-female dupont cable 5pcs (usually comes with the display)
-
-
-## Special thanks
-
-- Vajk for beta testing
-- [William Moeur](https://github.com/moeur) for NTP code improvements and credentials config
+- If the clock fails to connect to an AP it will ask for credentials
+- Run serial monitor (Arduino IDE) or minicom/putty, etc at 9600 bps
+- Type in your own Wifi credentials
 
 ## Future plans
 
 - Openweathermap API keys to EEPROM
 - Force configuration mode (button/jumper, etc)
+
+## Special thanks
+
+- Vajk for beta testing & original HOWTO
+- [William Moeur](https://github.com/moeur) for NTP code improvements and credentials config
+
