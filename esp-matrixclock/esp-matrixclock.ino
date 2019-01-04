@@ -20,6 +20,7 @@
 #endif
 
 #include <Arduino.h>
+#include <ArduinoOTA.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <Time.h>
@@ -80,11 +81,20 @@ void setup()
 	Serial.begin(9600);
 	Serial.println(); Serial.println();
 
+	// Set WiFi parameters explicitly: autoconnect, station mode 
+	WiFi.setAutoConnect(true);
+	WiFi.mode(WIFI_STA);
+	WiFi.hostname("matrixclock");
+
 	while (!startWiFi()) { delay(1500); }
 	Serial.println("WiFi connected");
 	Serial.println("IP address: ");
 	Serial.println(WiFi.localIP());
 	Serial.println();
+
+	ArduinoOTA.setHostname("matrixclock");
+  ArduinoOTA.setPassword("matrixclockfirmware");
+	ArduinoOTA.begin(); 
 
   NTPclient.begin("hu.pool.ntp.org", CET);
   setSyncInterval(SECS_PER_HOUR);
@@ -108,4 +118,5 @@ void loop()
 #else
 	display_clock();
 #endif
+	ArduinoOTA.handle();
 }

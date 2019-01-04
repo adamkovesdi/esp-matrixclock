@@ -32,7 +32,7 @@ bool startWiFi(void)
 {
 	uint8_t i;
 	// check for persistent wifi connection
-	for (i=0;i<10;i++){
+	for (i=0;i<20;i++){
 		if (WiFi.status() == WL_CONNECTED) return true;
 		delay(500);
 		Serial.print(".");
