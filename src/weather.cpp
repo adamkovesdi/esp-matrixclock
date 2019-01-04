@@ -37,6 +37,7 @@ int getWindspeed()
 	if(windspeed<50) return 6;
 	if(windspeed<62) return 7;
 	if(windspeed>=62) return 8;
+	return 0;
 }
 
 int getWeatherIcon()

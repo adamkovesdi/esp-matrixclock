@@ -2,13 +2,6 @@
  * ESP8266 driven matrix clock with weather
  * (c)2016-2018 Adam Kovesdi
  * version 3
- *
- * libray dependencies:
- * Timelib
- *  https://github.com/PaulStoffregen/Time
- * ArduinoJson version 5(!) for weather functionality
- *  https://github.com/bblanchon/ArduinoJson
- * 
  */
 
 // For weather functionality, get API key at openweathermap.org and set these two definitions 
@@ -37,7 +30,7 @@ NTP NTPclient;
 #define CET 1 // central european time
 
 // weather related stuff
-unsigned long lastweatherinfoupdate=0;			// last weather update EPOCH timestamp
+time_t lastweatherinfoupdate=0;			// last weather update EPOCH timestamp
 #define WEATHER_POLL_INTERVAL	300						// in seconds
 
 time_t getNTPtime(void)
