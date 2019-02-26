@@ -24,7 +24,7 @@ NTP NTPclient;
 // weather related stuff
 time_t lastweatherinfoupdate=0;			// last weather update EPOCH timestamp
 #define WEATHER_POLL_INTERVAL	300						// in seconds
-#define FLASHBUTTON 0
+#define CONFIGRESETBUTTON D5 // D5 - GPIO 14 on nodemcu hw
 
 bool reset_trigger = false;
 
@@ -69,7 +69,7 @@ void setup()
 	Serial.println(); Serial.println("boot"); Serial.println();
 
 	// set flash button to config resetter
-	pinMode(FLASHBUTTON, INPUT_PULLUP);
+	pinMode(CONFIGRESETBUTTON, INPUT_PULLUP);
 
 	initMAX7219();
 	drawStringClr(0,font," Conn...");
@@ -100,7 +100,7 @@ void loop()
 		display_clock();
 	}
 
-	if (digitalRead(FLASHBUTTON)==LOW) {
+	if (digitalRead(CONFIGRESETBUTTON)==LOW) {
 		if (reset_trigger == false) {
 			reset_trigger = true;
 			Serial.println("Config reset button pressed, taking action");
