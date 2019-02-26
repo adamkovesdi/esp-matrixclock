@@ -1,0 +1,1 @@
+#define METEOKEY		"936b1aed9a541e3446cafb8be2c70e62"
