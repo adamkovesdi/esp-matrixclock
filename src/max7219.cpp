@@ -1,7 +1,6 @@
 #include "max7219.h"
 
 uint8_t scr[NUM_MAX*8];
-
 void sendCmd(int addr, byte cmd, byte data)
 {
   digitalWrite(CS_PIN, LOW);
@@ -68,8 +67,17 @@ void setPixel(unsigned int x, unsigned int y, boolean value)
 {
 	// hardware dependent pixel buserator by adamkov
 	unsigned int bte,bit;
+
+#ifdef OLDTYPE_MATRIX
+	// use this for the old type green circuit board matrix (2017 version) (input connectors at seconds side)
 	bte=(3-(byte)(x/8))*8+y;
 	bit=7-((byte)(x%8));
+#else
+	// use this for the new type blue circuit board matrix (bought in 2019) (input connectors at hour side)
+	bte=((byte)(x/8))*8+y;
+	bit=7-((byte)(x%8));
+#endif
+
 	if(value)SETBIT(scr[bte],bit);
 	else CLEARBIT(scr[bte],bit);
 }
