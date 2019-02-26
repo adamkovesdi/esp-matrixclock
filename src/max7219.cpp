@@ -74,8 +74,8 @@ void setPixel(unsigned int x, unsigned int y, boolean value)
 	bit=7-((byte)(x%8));
 #else
 	// use this for the new type blue circuit board matrix (bought in 2019) (input connectors at hour side)
-	bte=((byte)(x/8))*8+y;
-	bit=7-((byte)(x%8));
+	bte=31-(((byte)(x/8))*8+y);
+	bit=((byte)(x%8));
 #endif
 
 	if(value)SETBIT(scr[bte],bit);

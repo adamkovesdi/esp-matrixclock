@@ -2,3 +2,7 @@
 credentials.h
 nogit
 .DS_Store
+.pioenvs
+.piolibdeps
+dev.sh
+Guardfile
