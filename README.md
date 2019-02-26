@@ -13,7 +13,7 @@ This is my dot matrix clock made with ESP8266 WiFi capable MCU. Accurate time si
 - Wind direction display
 - DST support (automatic change)
 - Over the Air (OTA) firmware upgrade capability
-- Serially configurable wifi credentials 
+- WifiManager Soft AP configuration interface
 
 ## Prerequisites
 - ESP8266 board (recommended: NodeMCU/compatible see BOM)
@@ -81,14 +81,26 @@ platformio run -t upload --upload-port <IP address of ESP>
 
 ### Wifi Configuration
 
+- Latest version of the Firmware uses the WifiManager library by tzapu to setup the clock
+- If no known WiFi AP is nearby, the clock starts the config portal
+- Connect to SSID: "MatrixAP"
+- Point your browser to 192.168.4.1
+- Follow instructions to configure your SSID, pass, API key and CityID
+
+- To manually force config AP mode, short D5 pin on NodeMCU to ground to enter
+
+
+Obsolete config instructions for the serial version:
+
 - If the clock fails to connect to an AP it will ask for credentials
 - Run serial monitor (Arduino IDE) or minicom/putty, etc at 9600 bps
 - Type in your own Wifi credentials
 
 ## Future plans
 
-- Openweathermap API keys to EEPROM
-- Force configuration mode (button/jumper, etc)
+- Dimmable display brightness (request)
+- Multiple NTP time-zone support
+- bugfix, testing
 
 ## Special thanks
 
