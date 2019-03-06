@@ -1,2 +1,2 @@
 #!/bin/bash
-cppcheck --enable=all ../esp-matrixclock/*.cpp ../esp-matrixclock/esp-matrixclock.ino
+cppcheck --enable=all ../src/*.cpp
